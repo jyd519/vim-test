@@ -84,6 +84,10 @@ function! test#execute(runner, args, ...) abort
   call filter(args, '!empty(v:val)')
 
   let executable = test#base#executable(a:runner)
+  if &shell=="cmd.exe" && executable =~ '^node_module'
+    let executable = expand("./" .. executable)
+  endif
+
   let args = test#base#build_args(a:runner, args, strategy)
   let cmd = [env, executable] + args
   call filter(cmd, '!empty(v:val)')
